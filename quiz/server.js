@@ -37,6 +37,17 @@ app.get('/read/usernames', (req, res) => {
   res.send(usernames);
 });
 
+app.use('/read/username', addMsgToRequest);
+app.get('/read/username/:name', (req, res) => {
+  let usernames = req.users.map(function(user) {
+    return {email: user.email, username: user.username};
+  });
+  let filtered = usernames.filter((user) => {
+    return user.username.toLowerCase().includes(req.params.name.toLowerCase());
+  });
+  res.send(filtered);
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/write/adduser', addMsgToRequest);
